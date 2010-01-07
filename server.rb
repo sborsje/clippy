@@ -33,7 +33,7 @@ get '/' do
           <embed height="14" width="110" bgcolor="#FFFFFF" flashvars="id=test_2&copied=copied!&copyto=copyToClipboard" pluginspage="http://www.macromedia.com/go/getflashplayer" type="application/x-shockwave-flash" allowscriptaccess="always" quality="high" name="clippy" src="/build/clippy.swf"/>
         </object>
 
-        <textarea id="test_2">this is test 2</textarea>
+        <div id="test_2">this is test 2</div>
       </body>
     </html>
   }
