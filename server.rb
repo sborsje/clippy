@@ -21,9 +21,9 @@ get '/' do
           <param value="always" name="allowScriptAccess"/>
           <param value="high" name="quality"/>
           <param value="noscale" name="scale"/>
-          <param value="id=test_1&copied=copied&copyto=copyToClipboard&callBack=test_1_call_back" name="FlashVars"/>
+          <param value="id=test_1&copied=copied&copyto=copyToClipboard" name="FlashVars"/>
           <param value="#FFFFFF" name="bgcolor"/>
-          <embed height="14" width="110" bgcolor="#FFFFFF" flashvars="id=test_1&copied=copied!&copyto=copyToClipboard&callBack=test_1_call_back" pluginspage="http://www.macromedia.com/go/getflashplayer" type="application/x-shockwave-flash" allowscriptaccess="always" quality="high" name="clippy" src="/build/clippy.swf"/>
+          <embed height="14" width="110" bgcolor="#FFFFFF" flashvars="id=test_1&copied=copied!&copyto=copyToClipboard" pluginspage="http://www.macromedia.com/go/getflashplayer" type="application/x-shockwave-flash" allowscriptaccess="always" quality="high" name="clippy" src="/build/clippy.swf"/>
         </object>
 
         <textarea id="test_1">this is test 1</textarea>

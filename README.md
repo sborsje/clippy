@@ -1,25 +1,24 @@
-Clippy - Helping you copy text to your clipboard
+Clippy - Helping you copy text to your clipboard (get the text form html element id)
 ================================================
 
-Clippy is a very simple Flash widget that makes it possible to place arbitrary
-text onto the client's clipboard. Here is what Clippy looks like on GitHub:
+Source Code: http://github.com/jinzhu/clippy
+Modfied By:  ZhangJinzhu - wosmvp@gmail.com
+Based On:    http://github.com/mojombo/clippy
 
-![Clippy in action](http://img.skitch.com/20090213-cjiawnwig8udf5a6qf1c45cne8.png)
+Here is a sample Rails (Ruby) helper that can be used to place Clippy on a page:
+C
 
-Here is a sample Rails (Ruby) helper that can be used to place Clippy on a
-page:
-
-    def clippy(htmlElementId, bgcolor='#FFFFFF')
+    def clippy(htmlElementId, copied='已复制(#default is `copied!`)',copyto='复制到剪贴板(#default is `copy to clipboard`)',callBack='clippyCallBackFuncation(#default is nothing)',bgcolor='#FFFFFF')
       html = <<-EOF
         <object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000"
                 width="110"
                 height="14"
-                id="clippy" >
-        <param name="movie" value="/flash/clippy.swf"/>
+                id="clippy-#{rand().object_id}" >
+        <param name="movie" value="/flash/clippy.swf" />
         <param name="allowScriptAccess" value="always" />
         <param name="quality" value="high" />
         <param name="scale" value="noscale" />
-        <param NAME="FlashVars" value="id=#{htmlElementId}">
+        <param NAME="FlashVars" value="id=#{idhtmlElementId}&amp;copied=#{copied}&amp;copyto=#{copyto}&amp;callBack=#{callBack}">
         <param name="bgcolor" value="#{bgcolor}">
         <embed src="/flash/clippy.swf"
                width="110"
@@ -29,37 +28,7 @@ page:
                allowScriptAccess="always"
                type="application/x-shockwave-flash"
                pluginspage="http://www.macromedia.com/go/getflashplayer"
-               FlashVars="id=#{idhtmlElementId}"
-               bgcolor="#{bgcolor}"
-        />
-        </object>
-      EOF
-    end
-
-
-Internationalization?
----------------------------
-    def clippy(htmlElementId, copied='已复制',copyto='复制到剪贴板',bgcolor='#FFFFFF')
-      html = <<-EOF
-        <object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000"
-                width="110"
-                height="14"
-                id="clippy" >
-        <param name="movie" value="/flash/clippy.swf"/>
-        <param name="allowScriptAccess" value="always" />
-        <param name="quality" value="high" />
-        <param name="scale" value="noscale" />
-        <param NAME="FlashVars" value="id=#{idhtmlElementId}&amp;copied=#{copied}&amp;copyto=#{copyto}">
-        <param name="bgcolor" value="#{bgcolor}">
-        <embed src="/flash/clippy.swf"
-               width="110"
-               height="14"
-               name="clippy"
-               quality="high"
-               allowScriptAccess="always"
-               type="application/x-shockwave-flash"
-               pluginspage="http://www.macromedia.com/go/getflashplayer"
-               FlashVars="id=#{idhtmlElementId}&amp;copied=#{copied}&amp;copyto=#{copyto}"
+               FlashVars="id=#{idhtmlElementId}&amp;copied=#{copied}&amp;copyto=#{copyto}&amp;callBack=#{callBack}"
                bgcolor="#{bgcolor}"
         />
         </object>

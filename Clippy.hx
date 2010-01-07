@@ -13,11 +13,12 @@ class Clippy {
     var copied:String   = flash.Lib.current.loaderInfo.parameters.copied;
     var copyto:String   = flash.Lib.current.loaderInfo.parameters.copyto;
     var callBack:String = flash.Lib.current.loaderInfo.parameters.callBack;
-    if(copied == null){ copied = "copied!";};
-    if(copyto == null){ copyto = "copy to clipboard";};
+
+    if(copied   == null)  copied   = "copied!";
+    if(copyto   == null)  copyto   = "copy to clipboard";
+    if(callBack == null)  callBack = "function(){}";
 
     // label
-
     var label:TextField   = new TextField();
     var format:TextFormat = new TextFormat("Arial", 10);
 
