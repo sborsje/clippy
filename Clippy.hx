@@ -9,9 +9,10 @@ import flash.external.ExternalInterface;
 class Clippy {
   // Main
   static function main() {
-    var id:String     = flash.Lib.current.loaderInfo.parameters.id;
-    var copied:String = flash.Lib.current.loaderInfo.parameters.copied;
-    var copyto:String = flash.Lib.current.loaderInfo.parameters.copyto;
+    var id:String       = flash.Lib.current.loaderInfo.parameters.id;
+    var copied:String   = flash.Lib.current.loaderInfo.parameters.copied;
+    var copyto:String   = flash.Lib.current.loaderInfo.parameters.copyto;
+    var callBack:String = flash.Lib.current.loaderInfo.parameters.callBack;
     if(copied == null){ copied = "copied!";};
     if(copyto == null){ copyto = "copy to clipboard";};
 
@@ -28,6 +29,8 @@ class Clippy {
     label.visible    = false;
 
     flash.Lib.current.addChild(label);
+    flash.Lib.current.stage.scaleMode = flash.display.StageScaleMode.NO_SCALE;
+    flash.Lib.current.stage.align     = flash.display.StageAlign.TOP_LEFT;
 
     // button
 
@@ -40,6 +43,7 @@ class Clippy {
 
     button.addEventListener(MouseEvent.CLICK, function(e:MouseEvent) {
       flash.system.System.setClipboard(ExternalInterface.call("function(id){ var elem = document.getElementById(id); if(elem){ return(elem.value || elem.innerHTML) }else{ alert('WARN: ' + id + ' Not found '); }}",id));
+      ExternalInterface.call(callBack, id);
 
       label.text = copied;
       label.setTextFormat(format);
