@@ -16,7 +16,7 @@ get '/' do
           function test_2_call_back() { alert('callBack 2'); }
         </script>
 
-        <object height="14" width="110" classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000">
+        <object height="14" width="110" classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" id='test1'>
           <param value="/build/clippy.swf" name="movie"/>
           <param value="always" name="allowScriptAccess"/>
           <param value="high" name="quality"/>
@@ -28,7 +28,7 @@ get '/' do
 
         <textarea id="test_1">this is test 1</textarea>
 
-        <object height="14" width="110" classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000">
+        <object height="14" width="110" classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" id='test2'>
           <param value="/build/clippy.swf" name="movie"/>
           <param value="always" name="allowScriptAccess"/>
           <param value="high" name="quality"/>
