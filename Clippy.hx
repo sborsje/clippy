@@ -22,14 +22,16 @@ class Clippy {
 
     // label
     var label:TextField   = new TextField();
-    var format:TextFormat = new TextFormat("Arial", 10);
+    var format:TextFormat = new TextFormat("Helvetica Neue", 13);
 
     label.text       = copyto;
     label.setTextFormat(format);
-    label.textColor  = 0x888888;
+    label.textColor  = 0x333333;
     label.selectable = false;
-    label.x          = 15;
-    label.visible    = false;
+    label.x          = 17;
+    label.y          = -2;
+    label.width      = 133;
+    label.visible    = true;
 
     flash.Lib.current.addChild(label);
     flash.Lib.current.stage.scaleMode = flash.display.StageScaleMode.NO_SCALE;
@@ -65,7 +67,7 @@ class Clippy {
     });
 
     button.addEventListener(MouseEvent.MOUSE_OUT, function(e:MouseEvent) {
-      label.visible = false;
+      label.visible = true;
       label.text    = copyto;
       label.setTextFormat(format);
     });
