@@ -1,14 +1,36 @@
 Clippy - Helping you copy text to your clipboard (get the text form html element id)
 ================================================
 
-Source Code: http://github.com/jinzhu/clippy
-Modfied By:  ZhangJinzhu - wosmvp@gmail.com
-Based On:    http://github.com/mojombo/clippy
+Here is a sample Rails helper that can be used to place Clippy on a page:
 
-Here is a sample Rails (Ruby) helper that can be used to place Clippy on a page:
-C
-
-    def clippy(htmlElementId, copied='已复制(#default is `copied!`)',copyto='复制到剪贴板(#default is `copy to clipboard`)',callBack='clippyCallBackFuncation(#default is nothing)',bgcolor='#FFFFFF')
+    # Generates clippy embed code with the given options. From the options one of
+    # <tt>:text</tt>, <tt>:id</tt>, or <tt>:call</tt> has to be provided.
+    #
+    # === Supported options
+    # [:text]
+    #   Text to be copied to the clipboard.
+    # [:id]
+    #   Id of a DOM element from which the text should be taken. If it is a form
+    #   element the <tt>value</tt> attribute, otherwise the <tt>innerHTML</tt>
+    #   attribute will be used.
+    # [:call]
+    #   A name of a javascript function to be called for the text.
+    # [:copied]
+    #   Label text to show next to the icon after a successful copy action.
+    # [:copyto]
+    #   Label text to show next to the icon before it is clicked.
+    # [:callBack]
+    #   A name of a javascript function to be called after a successful copy
+    #   action. The function will be called with one argument which is the value
+    #   of the <tt>text</tt>, <tt>id</tt>, or <tt>call</tt> parameter, whichever
+    #   was used.
+    def clippy(options={})
+      options = options.symbolize_keys
+      if options[:text].nil? and options[:id].nil? and options[:call].nil?
+        raise(ArgumentError, "at least :text, :id, or :call has to be provided")
+      end
+      bg_color = options.delete(:bg_color)
+      query_string = options.to_query
       html = <<-EOF
         <object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000"
                 width="110"
@@ -18,8 +40,8 @@ C
         <param name="allowScriptAccess" value="always" />
         <param name="quality" value="high" />
         <param name="scale" value="noscale" />
-        <param NAME="FlashVars" value="id=#{idhtmlElementId}&amp;copied=#{copied}&amp;copyto=#{copyto}&amp;callBack=#{callBack}">
-        <param name="bgcolor" value="#{bgcolor}">
+        <param NAME="FlashVars" value="#{query_string}">
+        <param name="bgcolor" value="#{bg_color}">
         <embed src="/flash/clippy.swf"
                width="110"
                height="14"
@@ -28,8 +50,8 @@ C
                allowScriptAccess="always"
                type="application/x-shockwave-flash"
                pluginspage="http://www.macromedia.com/go/getflashplayer"
-               FlashVars="id=#{idhtmlElementId}&amp;copied=#{copied}&amp;copyto=#{copyto}&amp;callBack=#{callBack}"
-               bgcolor="#{bgcolor}"
+               FlashVars="#{query_string}"
+               bgcolor="#{bg_color}"
         />
         </object>
       EOF
