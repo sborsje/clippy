@@ -9,7 +9,9 @@ import flash.external.ExternalInterface;
 class Clippy {
   // Main
   static function main() {
+    var text:String     = flash.Lib.current.loaderInfo.parameters.text;
     var id:String       = flash.Lib.current.loaderInfo.parameters.id;
+    var call:String     = flash.Lib.current.loaderInfo.parameters.call;
     var copied:String   = flash.Lib.current.loaderInfo.parameters.copied;
     var copyto:String   = flash.Lib.current.loaderInfo.parameters.copyto;
     var callBack:String = flash.Lib.current.loaderInfo.parameters.callBack;
@@ -43,8 +45,16 @@ class Clippy {
     button.hitTestState     = flash.Lib.attach("button_down");
 
     button.addEventListener(MouseEvent.CLICK, function(e:MouseEvent) {
-      flash.system.System.setClipboard(ExternalInterface.call("function(id){ var elem = document.getElementById(id); if(elem){ return(elem.value || elem.innerHTML) }else{ alert('WARN: ' + id + ' Not found '); }}",id));
-      ExternalInterface.call(callBack, id);
+      if (text != null) {
+        flash.system.System.setClipboard(text);
+        ExternalInterface.call(callBack, text);
+      } else if (id != null) {
+        flash.system.System.setClipboard(ExternalInterface.call("function(id) { var elem = document.getElementById(id); if(elem) { return(elem.value || elem.innerHTML) } else { alert('WARN: ' + id + ' Not found '); } }", id));
+        ExternalInterface.call(callBack, id);
+      } else {
+        flash.system.System.setClipboard(ExternalInterface.call(call));
+        ExternalInterface.call(callBack, call);
+      }
 
       label.text = copied;
       label.setTextFormat(format);
