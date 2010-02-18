@@ -33,24 +33,24 @@ class Clippy {
         flash.system.System.setClipboard(text);
         ExternalInterface.call(callBack, text, id);
       } else {
-        flash.system.System.setClipboard(ExternalInterface.call(callBack, "mouseClick", id));
+        flash.system.System.setClipboard(ExternalInterface.call(callBack, "click", id));
       }
     });
 
     button.addEventListener(MouseEvent.MOUSE_OVER, function(e:MouseEvent) {
-      ExternalInterface.call(callBack, "mouseOver", id);
+      ExternalInterface.call(callBack, "mouseenter", id);
     });
 
     button.addEventListener(MouseEvent.MOUSE_OUT, function(e:MouseEvent) {
-      ExternalInterface.call(callBack, "mouseOut", id);
+      ExternalInterface.call(callBack, "mouseleave", id);
     });
 
     button.addEventListener(MouseEvent.MOUSE_DOWN, function(e:MouseEvent) {
-      ExternalInterface.call(callBack, "mouseDown", id);
+      ExternalInterface.call(callBack, "mousedown", id);
     });
 
     button.addEventListener(MouseEvent.MOUSE_UP, function(e:MouseEvent) {
-       ExternalInterface.call(callBack, "mouseUp", id);
+       ExternalInterface.call(callBack, "mouseup", id);
     });
 
     flash.Lib.current.addChild(button);
