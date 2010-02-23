@@ -18,7 +18,6 @@ class Clippy extends SimpleButton {
 
   var callBack:String;
   var text:String;
-  var id:String;
 
   public function new() {
     super();
@@ -36,11 +35,22 @@ class Clippy extends SimpleButton {
   function onAddedToStage(e:Event) {
     onStageResize(null);
 
-    callBack = flash.Lib.current.stage.loaderInfo.parameters.callBack;
-    text     = flash.Lib.current.stage.loaderInfo.parameters.text;
-    id       = flash.Lib.current.stage.loaderInfo.parameters.id;
+    var id:String = flash.Lib.current.stage.loaderInfo.parameters.id;
+    text          = flash.Lib.current.stage.loaderInfo.parameters.text;
 
-    if(callBack == null)  callBack = "function(){}";
+    if (id != null) {
+      callBack = "function (event) {
+        var clippy = document.getElementById('" + id + "');
+        if (clippy != null && typeof clippy[event] === 'function') {
+          var clipboard = clippy[event].call(clippy);
+          if (event === 'onClick') {
+            return clipboard;
+          }
+        }
+      }";
+    } else {
+      callBack = "function () {}";
+    }
 
     // Add hooks to for javascript to call
     ExternalInterface.addCallback("enable", enable);
@@ -48,7 +58,7 @@ class Clippy extends SimpleButton {
 
     // Let javascript know we are ready for use
     enable();
-    ExternalInterface.call(callBack, "loaded", id);
+    ExternalInterface.call(callBack, "onLoaded");
   }
 
   function onStageResize(e:Event) {
@@ -79,18 +89,17 @@ class Clippy extends SimpleButton {
       case MouseEvent.CLICK:
         if (text != null) {
           System.setClipboard(text);
-          ExternalInterface.call(callBack, text, id);
         } else {
-          System.setClipboard(ExternalInterface.call(callBack, "click", id));
+          System.setClipboard(ExternalInterface.call(callBack, "onClick"));
         }
       case MouseEvent.MOUSE_OVER:
-        ExternalInterface.call(callBack, "mouseenter", id);
+        ExternalInterface.call(callBack, "onMouseEnter");
       case MouseEvent.MOUSE_OUT:
-        ExternalInterface.call(callBack, "mouseleave", id);
+        ExternalInterface.call(callBack, "onMouseLeave");
       case MouseEvent.MOUSE_DOWN:
-        ExternalInterface.call(callBack, "mousedown", id);
+        ExternalInterface.call(callBack, "onMouseDown");
       case MouseEvent.MOUSE_UP:
-        ExternalInterface.call(callBack, "mouseup", id);
+        ExternalInterface.call(callBack, "onMouseUp");
     }
   }
 }
