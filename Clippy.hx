@@ -5,101 +5,45 @@ import flash.external.ExternalInterface;
 import flash.events.Event;
 import flash.system.System;
 
-class Clippy extends SimpleButton {
+import flash.display.MovieClip;
+import flash.events.MouseEvent;
+import flash.display.SimpleButton;
+import flash.text.TextField;
+import flash.text.TextFieldAutoSize;
+import flash.text.TextFormat;
+import flash.external.ExternalInterface;
+
+class Clippy {
   // Main
   static function main() {
-    flash.system.Security.allowDomain("*");
+    var call:String     = flash.Lib.current.loaderInfo.parameters.call;
+    var callBack:String = flash.Lib.current.loaderInfo.parameters.callBack;
+
+    if(callBack == null) callBack = "function(){}";
 
     flash.Lib.current.stage.scaleMode = flash.display.StageScaleMode.NO_SCALE;
     flash.Lib.current.stage.align     = flash.display.StageAlign.TOP_LEFT;
 
-    flash.Lib.current.addChild(new Clippy());
-  }
+    var button:SimpleButton = new SimpleButton();
+    button.useHandCursor    = true;
+    button.upState          = flash.Lib.attach("button_up");
+    button.overState        = flash.Lib.attach("button_over");
+    button.downState        = flash.Lib.attach("button_down");
+    button.hitTestState     = flash.Lib.attach("button_down");
 
-  var callBack:String;
-  var text:String;
+    button.addEventListener(MouseEvent.CLICK, function(e:MouseEvent) {
+      flash.system.System.setClipboard(ExternalInterface.call(call));
+      ExternalInterface.call(callBack, 'onClick', call);
+    });
 
-  public function new() {
-    super();
+    button.addEventListener(MouseEvent.MOUSE_OVER, function(e:MouseEvent) {
+      ExternalInterface.call(callBack, 'onMouseEnter', call);
+    });
 
-    useHandCursor    = true;
-    upState          = flash.Lib.attach("button_up");
-    overState        = flash.Lib.attach("button_over");
-    downState        = flash.Lib.attach("button_down");
-    hitTestState     = flash.Lib.attach("button_down");
+    button.addEventListener(MouseEvent.MOUSE_OUT, function(e:MouseEvent) {
+      ExternalInterface.call(callBack, 'onMouseLeave', call);
+    });
 
-    addEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
-    flash.Lib.current.stage.addEventListener(Event.RESIZE, onStageResize);
-  }
-
-  function onAddedToStage(e:Event) {
-    onStageResize(null);
-
-    var id:String = flash.Lib.current.stage.loaderInfo.parameters.id;
-    text          = flash.Lib.current.stage.loaderInfo.parameters.text;
-
-    if (id != null) {
-      callBack = "function (event) {
-        var clippy = document.getElementById('" + id + "');
-        if (clippy != null && typeof clippy[event] === 'function') {
-          var clipboard = clippy[event].call(clippy);
-          if (event === 'onClick') {
-            return clipboard;
-          }
-        }
-      }";
-    } else {
-      callBack = "function () {}";
-    }
-
-    // Add hooks to for javascript to call
-    ExternalInterface.addCallback("enable", enable);
-    ExternalInterface.addCallback("disable", disable);
-
-    // Let javascript know we are ready for use
-    enable();
-    ExternalInterface.call(callBack, "onLoaded");
-  }
-
-  function onStageResize(e:Event) {
-    width  = flash.Lib.current.stage.stageWidth;
-    height = flash.Lib.current.stage.stageHeight;
-  }
-
-  public function enable() {
-    enabled = true;
-    addEventListener(MouseEvent.CLICK, onMouseEvent);
-    addEventListener(MouseEvent.MOUSE_OVER, onMouseEvent);
-    addEventListener(MouseEvent.MOUSE_OUT, onMouseEvent);
-    addEventListener(MouseEvent.MOUSE_DOWN, onMouseEvent);
-    addEventListener(MouseEvent.MOUSE_UP, onMouseEvent);
-  }
-
-  public function disable() {
-    enabled = false;
-    removeEventListener(MouseEvent.CLICK, onMouseEvent);
-    removeEventListener(MouseEvent.MOUSE_OVER, onMouseEvent);
-    removeEventListener(MouseEvent.MOUSE_OUT, onMouseEvent);
-    removeEventListener(MouseEvent.MOUSE_DOWN, onMouseEvent);
-    removeEventListener(MouseEvent.MOUSE_UP, onMouseEvent);
-  }
-
-  function onMouseEvent(e:MouseEvent) {
-    switch(e.type) {
-      case MouseEvent.CLICK:
-        if (text != null) {
-          System.setClipboard(text);
-        } else {
-          System.setClipboard(ExternalInterface.call(callBack, "onClick"));
-        }
-      case MouseEvent.MOUSE_OVER:
-        ExternalInterface.call(callBack, "onMouseEnter");
-      case MouseEvent.MOUSE_OUT:
-        ExternalInterface.call(callBack, "onMouseLeave");
-      case MouseEvent.MOUSE_DOWN:
-        ExternalInterface.call(callBack, "onMouseDown");
-      case MouseEvent.MOUSE_UP:
-        ExternalInterface.call(callBack, "onMouseUp");
-    }
+    flash.Lib.current.addChild(button);
   }
 }
